@@ -11,6 +11,7 @@ Abra o arquivo `index.html` em um navegador. O projeto usa HTML, CSS e JavaScrip
 - Ajuste a barra para dividir os votos habilitados entre os finalistas. Desmarcar o candidato retira seus votos do resultado e preserva a posição escolhida na barra.
 - Escolha o percentual dos eleitores ausentes que passam a votar e distribua os votos adicionais.
 - Consulte os totais, percentuais e a diferença entre os candidatos.
+- O painel **Resultado simulado** permanece no topo durante a rolagem e fica compacto no celular, para acompanhar os números enquanto ajusta as barras.
 - Use **Reiniciar** para restaurar os valores iniciais, desmarcar todas as transferências e zerar o comparecimento adicional.
 
 O botão **Copiar resultado** depende da permissão de acesso à área de transferência do navegador e pode exigir que a página seja servida por HTTPS ou em um servidor local.

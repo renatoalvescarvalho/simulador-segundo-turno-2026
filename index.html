@@ -6,11 +6,36 @@
 <style>
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#172033;background:#f4f6fa}*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:900px;margin:auto}.header{margin-bottom:22px}h1{font-size:clamp(25px,4vw,38px);margin:0 0 7px}h2{font-size:20px;margin:0 0 10px}p{color:#566176;line-height:1.5}.card{background:#fff;border-radius:18px;padding:24px;margin:18px 0;box-shadow:0 2px 20px #1b2b4610}.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.candidate{background:#f6f8fc;border-radius:12px;padding:18px}.candidate b{display:block;font-size:30px;margin:8px 0}.muted{color:#647087;font-size:13px}.red{color:#b52d43}.blue{color:#2265ae}.bar{height:25px;background:#2265ae;border-radius:9px;overflow:hidden;display:flex;margin-top:18px}.bar>div{background:#d24b54;transition:width .15s}.labels,.split{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:8px}.winner{text-align:center;background:#f5f7fb;padding:18px;border-radius:12px;margin-top:18px}.winner strong{font-size:21px}.item{margin:24px 0 30px}.itemheader{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.itemheader strong{font-size:16px}.itemheader span{color:#657187;font-size:13px}input[type=range]{width:100%;margin:18px 0 6px;accent-color:#536d97;cursor:pointer}button{border:0;border-radius:10px;background:#172d55;color:#fff;padding:12px 18px;font-weight:650;cursor:pointer}button.secondary{background:#e8edf5;color:#203451}.actions{display:flex;gap:10px;flex-wrap:wrap}table{border-collapse:collapse;width:100%}td{padding:11px 5px;border-bottom:1px solid #e8edf3}td:last-child{text-align:right;font-variant-numeric:tabular-nums}footer{font-size:13px;color:#647087;padding:20px 0 50px}.tag{display:inline-block;background:#e8eef9;color:#294875;border-radius:20px;padding:5px 11px;font-size:12px;margin-bottom:10px}@media(max-width:540px){body{padding:12px}.card{padding:17px}.candidate{padding:12px}.candidate b{font-size:24px}.labels,.split{font-size:11px}}
 .transfer-toggle{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:14px;font-weight:600;cursor:pointer}.transfer-toggle input{width:18px;height:18px;margin:0;accent-color:#536d97;flex-shrink:0}input[type=range]:disabled{cursor:not-allowed;opacity:.4}.transfer-status{margin:8px 0 0;font-size:13px;color:#647087}
+html{scroll-padding-top:var(--result-offset,24px)}
+.result-card{position:sticky;top:max(8px,env(safe-area-inset-top));z-index:20;box-shadow:0 8px 24px #17203322}
+.result-card #difference{margin-top:6px}
+@media(max-width:540px),(max-height:540px){
+  .result-card{padding:12px;border-radius:14px}
+  .result-card h2{font-size:16px;margin-bottom:8px}
+  .result-card .cards{gap:8px}
+  .result-card .candidate{padding:8px;min-width:0}
+  .result-card .candidate>span{font-size:clamp(10px,2.8vw,12px);white-space:nowrap}
+  .result-card .candidate b{font-size:24px;margin:3px 0}
+  .result-card #lv,.result-card #fv{font-size:12px}
+  .result-card .muted{font-size:10px}
+  .result-card .bar{height:8px;margin-top:8px;border-radius:4px}
+  .result-card .labels{display:none}
+  .result-card .winner{padding:7px;margin-top:8px}
+  .result-card .winner strong{font-size:14px}
+  .result-card #difference{font-size:11px;margin-top:2px}
+}
+@media(max-height:420px){
+  .result-card{padding:8px}
+  .result-card h2{font-size:14px;margin-bottom:5px}
+  .result-card .candidate .muted,.result-card .winner>.muted{display:none}
+  .result-card .candidate b{font-size:20px;margin:2px 0}
+  .result-card .winner{padding:4px;margin-top:5px}
+}
 </style>
 </head>
 <body><main>
 <header class="header"><span class="tag">Simulador independente • Cenário hipotético</span><h1>Segundo turno presidencial 2026</h1><p>Distribua os votos dos demais candidatos entre Lula e Flávio Bolsonaro e simule o impacto das abstenções. O resultado muda instantaneamente.</p></header>
-<section class="card"><h2>Resultado simulado</h2><div class="cards"><div class="candidate"><span class="red">● Lula (PT)</span><b id="lp">—</b><div id="lv"></div><div class="muted">Base fixa: 53.879.538</div></div><div class="candidate"><span class="blue">● Flávio Bolsonaro (PL)</span><b id="fp">—</b><div id="fv"></div><div class="muted">Base fixa: 56.104.503</div></div></div><div class="bar"><div id="leftbar"></div></div><div class="labels"><span>Lula</span><span>Flávio Bolsonaro</span></div><div class="winner"><div class="muted">Vencedor da simulação</div><strong id="winner">—</strong><div id="difference" style="margin-top:6px"></div></div></section>
+<section class="card result-card" id="result"><h2>Resultado simulado</h2><div class="cards"><div class="candidate"><span class="red">● Lula (PT)</span><b id="lp">—</b><div id="lv"></div><div class="muted">Base fixa: 53.879.538</div></div><div class="candidate"><span class="blue">● Flávio Bolsonaro (PL)</span><b id="fp">—</b><div id="fv"></div><div class="muted">Base fixa: 56.104.503</div></div></div><div class="bar"><div id="leftbar"></div></div><div class="labels"><span>Lula</span><span>Flávio Bolsonaro</span></div><div class="winner"><div class="muted">Vencedor da simulação</div><strong id="winner">—</strong><div id="difference"></div></div></section>
 <section class="card"><h2>Transferência de votos do 1º turno</h2><p>Os votos dos candidatos eliminados começam sem transferência. Marque <b>Incluir votos na simulação</b> para habilitar cada candidato. Depois, deslize para a <b>esquerda (Lula)</b> ou para a <b>direita (Flávio)</b>. Ao habilitar, a barra começa dividindo os votos em 50% para cada.</p><div id="sliders"></div></section>
 <section class="card"><h2>Abstenções</h2><p>No primeiro turno, 33.469.244 eleitores se abstiveram. Primeiro, simule quantos passam a comparecer; depois, distribua seus votos.</p><div class="item"><div class="itemheader"><strong>Eleitores ausentes que passam a votar</strong><b id="turnoutText">0%</b></div><input id="turnout" type="range" min="0" max="100" value="0"><div class="split"><span id="newVotes">0 novos votos</span><span id="remainVotes">33.469.244 ainda ausentes</span></div></div><div class="item"><div class="itemheader"><strong>Destino dos votos adicionais</strong><span id="abstDescription"></span></div><input id="abst" type="range" min="0" max="100" value="50"><div class="split"><span id="abstL"></span><span id="abstF"></span></div></div></section>
 <section class="card"><h2>Resumo</h2><table><tbody id="summary"></tbody></table><div class="actions" style="margin-top:20px"><button id="reset">Reiniciar</button><button id="copy" class="secondary">Copiar resultado</button></div></section>
@@ -85,4 +110,8 @@ el('reset').onclick=()=>{
 };
 el('copy').onclick=async()=>{try{await navigator.clipboard.writeText(window.resultText);el('copy').textContent='Copiado!';setTimeout(()=>el('copy').textContent='Copiar resultado',1500)}catch(e){alert('Não foi possível copiar neste navegador.')}};
 calculate();
+const resultCard=el('result');
+const updateResultOffset=()=>document.documentElement.style.setProperty('--result-offset',`${resultCard.getBoundingClientRect().height+24}px`);
+if('ResizeObserver' in window){new ResizeObserver(updateResultOffset).observe(resultCard)}
+updateResultOffset();
 </script></body></html>
