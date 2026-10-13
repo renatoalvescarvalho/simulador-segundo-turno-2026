@@ -5,22 +5,84 @@
 <title>Simulador do Segundo Turno — Brasil 2026</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#172033;background:#f4f6fa}*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:900px;margin:auto}.header{margin-bottom:22px}h1{font-size:clamp(25px,4vw,38px);margin:0 0 7px}h2{font-size:20px;margin:0 0 10px}p{color:#566176;line-height:1.5}.card{background:#fff;border-radius:18px;padding:24px;margin:18px 0;box-shadow:0 2px 20px #1b2b4610}.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.candidate{background:#f6f8fc;border-radius:12px;padding:18px}.candidate b{display:block;font-size:30px;margin:8px 0}.muted{color:#647087;font-size:13px}.red{color:#b52d43}.blue{color:#2265ae}.bar{height:25px;background:#2265ae;border-radius:9px;overflow:hidden;display:flex;margin-top:18px}.bar>div{background:#d24b54;transition:width .15s}.labels,.split{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:8px}.winner{text-align:center;background:#f5f7fb;padding:18px;border-radius:12px;margin-top:18px}.winner strong{font-size:21px}.item{margin:24px 0 30px}.itemheader{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.itemheader strong{font-size:16px}.itemheader span{color:#657187;font-size:13px}input[type=range]{width:100%;margin:18px 0 6px;accent-color:#536d97;cursor:pointer}button{border:0;border-radius:10px;background:#172d55;color:#fff;padding:12px 18px;font-weight:650;cursor:pointer}button.secondary{background:#e8edf5;color:#203451}.actions{display:flex;gap:10px;flex-wrap:wrap}table{border-collapse:collapse;width:100%}td{padding:11px 5px;border-bottom:1px solid #e8edf3}td:last-child{text-align:right;font-variant-numeric:tabular-nums}footer{font-size:13px;color:#647087;padding:20px 0 50px}.tag{display:inline-block;background:#e8eef9;color:#294875;border-radius:20px;padding:5px 11px;font-size:12px;margin-bottom:10px}@media(max-width:540px){body{padding:12px}.card{padding:17px}.candidate{padding:12px}.candidate b{font-size:24px}.labels,.split{font-size:11px}}
+.transfer-toggle{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:14px;font-weight:600;cursor:pointer}.transfer-toggle input{width:18px;height:18px;margin:0;accent-color:#536d97;flex-shrink:0}input[type=range]:disabled{cursor:not-allowed;opacity:.4}.transfer-status{margin:8px 0 0;font-size:13px;color:#647087}
 </style>
 </head>
 <body><main>
 <header class="header"><span class="tag">Simulador independente • Cenário hipotético</span><h1>Segundo turno presidencial 2026</h1><p>Distribua os votos dos demais candidatos entre Lula e Flávio Bolsonaro e simule o impacto das abstenções. O resultado muda instantaneamente.</p></header>
 <section class="card"><h2>Resultado simulado</h2><div class="cards"><div class="candidate"><span class="red">● Lula (PT)</span><b id="lp">—</b><div id="lv"></div><div class="muted">Base fixa: 53.879.538</div></div><div class="candidate"><span class="blue">● Flávio Bolsonaro (PL)</span><b id="fp">—</b><div id="fv"></div><div class="muted">Base fixa: 56.104.503</div></div></div><div class="bar"><div id="leftbar"></div></div><div class="labels"><span>Lula</span><span>Flávio Bolsonaro</span></div><div class="winner"><div class="muted">Vencedor da simulação</div><strong id="winner">—</strong><div id="difference" style="margin-top:6px"></div></div></section>
-<section class="card"><h2>Transferência de votos do 1º turno</h2><p>Deslize para a <b>esquerda (Lula)</b> ou para a <b>direita (Flávio)</b>. A divisão inicial é 50% para cada.</p><div id="sliders"></div></section>
+<section class="card"><h2>Transferência de votos do 1º turno</h2><p>Os votos dos candidatos eliminados começam sem transferência. Marque <b>Incluir votos na simulação</b> para habilitar cada candidato. Depois, deslize para a <b>esquerda (Lula)</b> ou para a <b>direita (Flávio)</b>. Ao habilitar, a barra começa dividindo os votos em 50% para cada.</p><div id="sliders"></div></section>
 <section class="card"><h2>Abstenções</h2><p>No primeiro turno, 33.469.244 eleitores se abstiveram. Primeiro, simule quantos passam a comparecer; depois, distribua seus votos.</p><div class="item"><div class="itemheader"><strong>Eleitores ausentes que passam a votar</strong><b id="turnoutText">0%</b></div><input id="turnout" type="range" min="0" max="100" value="0"><div class="split"><span id="newVotes">0 novos votos</span><span id="remainVotes">33.469.244 ainda ausentes</span></div></div><div class="item"><div class="itemheader"><strong>Destino dos votos adicionais</strong><span id="abstDescription"></span></div><input id="abst" type="range" min="0" max="100" value="50"><div class="split"><span id="abstL"></span><span id="abstF"></span></div></div></section>
 <section class="card"><h2>Resumo</h2><table><tbody id="summary"></tbody></table><div class="actions" style="margin-top:20px"><button id="reset">Reiniciar</button><button id="copy" class="secondary">Copiar resultado</button></div></section>
-<footer>Fonte dos números iniciais: apuração do primeiro turno de 2026 publicada por veículos com base nos dados do TSE. <a href="https://g1.globo.com/politica/eleicoes/2026/apuracao/presidente.ghtml" target="_blank" rel="noopener noreferrer">Consultar apuração no G1</a>. Modelo simplificado: mantém os votos dos dois finalistas e redistribui integralmente os demais votos válidos; não considera novas abstenções entre seus eleitores, nem novos brancos e nulos. Este site não é uma pesquisa eleitoral nem uma previsão.</footer>
+<footer>Fonte dos números iniciais: apuração do primeiro turno de 2026 publicada por veículos com base nos dados do TSE. <a href="https://g1.globo.com/politica/eleicoes/2026/apuracao/presidente.ghtml" target="_blank" rel="noopener noreferrer">Consultar apuração no G1</a>. Modelo simplificado: mantém os votos dos dois finalistas e redistribui apenas os votos dos candidatos habilitados na simulação; não considera novas abstenções entre seus eleitores, nem novos brancos e nulos. Os percentuais são calculados sobre os votos incluídos na simulação. Este site não é uma pesquisa eleitoral nem uma previsão.</footer>
 </main><script>
 const BASE_L=53879538,BASE_F=56104503,ABST=33469244;
 const candidates=[['Augusto Cury','Avante',3448569],['Renan Santos','Missão',2675887],['Ronaldo Caiado','PSD',2605148],['Romeu Zema','Novo',326488],['Outros seis candidatos','',260655]];
 const nf=new Intl.NumberFormat('pt-BR'),pf=n=>new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+'%';
 const el=id=>document.getElementById(id);const sliders=el('sliders');
-candidates.forEach(([name,party,votes],i)=>{const div=document.createElement('div');div.className='item';div.innerHTML=`<div class="itemheader"><strong>${name}</strong><span>${party?party+' • ':''}${nf.format(votes)} votos</span></div><input type="range" id="s${i}" min="0" max="100" value="50" aria-label="Transferência dos votos de ${name}"><div class="split"><span id="l${i}"></span><span id="f${i}"></span></div>`;sliders.appendChild(div);el('s'+i).addEventListener('input',calculate)});
+candidates.forEach(([name,party,votes],i)=>{
+  const div=document.createElement('div');
+  div.className='item';
+  div.innerHTML=`<div class="itemheader"><strong>${name}</strong><span>${party?party+' • ':''}${nf.format(votes)} votos no 1º turno</span></div><label class="transfer-toggle"><input type="checkbox" id="enabled${i}" aria-label="Incluir votos de ${name} na simulação" aria-controls="s${i}">Incluir votos na simulação</label><p class="transfer-status" id="status${i}"></p><input type="range" id="s${i}" min="0" max="100" value="50" disabled aria-label="Transferência dos votos de ${name}" aria-describedby="status${i}"><div class="split"><span id="l${i}"></span><span id="f${i}"></span></div>`;
+  sliders.appendChild(div);
+  el('enabled'+i).addEventListener('change',calculate);
+  el('s'+i).addEventListener('input',calculate);
+});
 el('turnout').addEventListener('input',calculate);el('abst').addEventListener('input',calculate);
-function calculate(){let l=BASE_L,f=BASE_F;candidates.forEach(([name,party,votes],i)=>{const share=+el('s'+i).value;const vl=Math.round(votes*(100-share)/100);const vf=votes-vl;l+=vl;f+=vf;el('l'+i).textContent=`Lula ${100-share}% (${nf.format(vl)})`;el('f'+i).textContent=`Flávio ${share}% (${nf.format(vf)})`;});const turnout=+el('turnout').value;const newV=Math.round(ABST*turnout/100);const split=+el('abst').value;const addL=Math.round(newV*(100-split)/100);l+=addL;f+=newV-addL;const total=l+f,pL=l/total*100,pF=f/total*100;el('lp').textContent=pf(pL);el('fp').textContent=pf(pF);el('lv').textContent=nf.format(l)+' votos';el('fv').textContent=nf.format(f)+' votos';el('leftbar').style.width=pL+'%';el('winner').textContent=l===f?'Empate':l>f?'Lula venceria':'Flávio Bolsonaro venceria';el('difference').textContent=`Diferença: ${nf.format(Math.abs(l-f))} votos • ${pf(Math.abs(pL-pF))} p.p.`;el('turnoutText').textContent=turnout+'%';el('newVotes').textContent=nf.format(newV)+' novos votos';el('remainVotes').textContent=nf.format(ABST-newV)+' ainda ausentes';el('abst').disabled=newV===0;el('abstDescription').textContent=newV===0?'Escolha um comparecimento acima de 0%':'';el('abstL').textContent=`Lula ${100-split}% (${nf.format(addL)})`;el('abstF').textContent=`Flávio ${split}% (${nf.format(newV-addL)})`;el('summary').innerHTML=[['Base Lula',BASE_L],['Base Flávio',BASE_F],['Transferências + abstenções para Lula',l-BASE_L],['Transferências + abstenções para Flávio',f-BASE_F],['Total de votos válidos',total],['Maioria necessária',Math.floor(total/2)+1]].map(([label,v])=>`<tr><td>${label}</td><td>${nf.format(v)}</td></tr>`).join('');window.resultText=`Simulação do 2º turno de 2026\nLula: ${nf.format(l)} (${pf(pL)})\nFlávio Bolsonaro: ${nf.format(f)} (${pf(pF)})\nDiferença: ${nf.format(Math.abs(l-f))} votos\nComparecimento adicional das abstenções: ${turnout}%`}
-el('reset').onclick=()=>{candidates.forEach((_,i)=>el('s'+i).value=50);el('turnout').value=0;el('abst').value=50;calculate()};el('copy').onclick=async()=>{try{await navigator.clipboard.writeText(window.resultText);el('copy').textContent='Copiado!';setTimeout(()=>el('copy').textContent='Copiar resultado',1500)}catch(e){alert('Não foi possível copiar neste navegador.')}};calculate();
+function calculate(){
+  let l=BASE_L,f=BASE_F,transferred=0,pending=0;
+  const activeCandidates=[];
+  candidates.forEach(([name,party,votes],i)=>{
+    const enabled=el('enabled'+i).checked;
+    const share=+el('s'+i).value;
+    const vl=enabled?Math.round(votes*(100-share)/100):0;
+    const vf=enabled?votes-vl:0;
+    l+=vl;
+    f+=vf;
+    el('s'+i).disabled=!enabled;
+    el('status'+i).textContent=enabled?'Votos incluídos de acordo com a barra.':'Transferência desativada: os votos continuam disponíveis.';
+    el('l'+i).textContent=enabled?`Lula ${100-share}% (${nf.format(vl)})`:'Lula 0 votos';
+    el('f'+i).textContent=enabled?`Flávio ${share}% (${nf.format(vf)})`:'Flávio 0 votos';
+    if(enabled){
+      transferred+=votes;
+      activeCandidates.push(`${name}: Lula ${100-share}% / Flávio ${share}%`);
+    }else{
+      pending+=votes;
+    }
+  });
+  const turnout=+el('turnout').value;
+  const newV=Math.round(ABST*turnout/100);
+  const split=+el('abst').value;
+  const addL=Math.round(newV*(100-split)/100);
+  l+=addL;
+  f+=newV-addL;
+  const total=l+f,pL=l/total*100,pF=f/total*100;
+  el('lp').textContent=pf(pL);
+  el('fp').textContent=pf(pF);
+  el('lv').textContent=nf.format(l)+' votos';
+  el('fv').textContent=nf.format(f)+' votos';
+  el('leftbar').style.width=pL+'%';
+  el('winner').textContent=l===f?'Empate':l>f?'Lula venceria':'Flávio Bolsonaro venceria';
+  el('difference').textContent=`Diferença: ${nf.format(Math.abs(l-f))} votos • ${pf(Math.abs(pL-pF))} p.p.`;
+  el('turnoutText').textContent=turnout+'%';
+  el('newVotes').textContent=nf.format(newV)+' novos votos';
+  el('remainVotes').textContent=nf.format(ABST-newV)+' ainda ausentes';
+  el('abst').disabled=newV===0;
+  el('abstDescription').textContent=newV===0?'Escolha um comparecimento acima de 0%':'';
+  el('abstL').textContent=`Lula ${100-split}% (${nf.format(addL)})`;
+  el('abstF').textContent=`Flávio ${split}% (${nf.format(newV-addL)})`;
+  el('summary').innerHTML=[['Base Lula',BASE_L],['Base Flávio',BASE_F],['Votos de eliminados transferidos',transferred],['Votos de eliminados ainda não transferidos',pending],['Transferências + abstenções para Lula',l-BASE_L],['Transferências + abstenções para Flávio',f-BASE_F],['Votos válidos na simulação',total],['Maioria necessária',Math.floor(total/2)+1]].map(([label,v])=>`<tr><td>${label}</td><td>${nf.format(v)}</td></tr>`).join('');
+  window.resultText=`Simulação do 2º turno de 2026\nLula: ${nf.format(l)} (${pf(pL)})\nFlávio Bolsonaro: ${nf.format(f)} (${pf(pF)})\nDiferença: ${nf.format(Math.abs(l-f))} votos\nVotos de eliminados ainda não transferidos: ${nf.format(pending)}\nTransferências habilitadas: ${activeCandidates.length?activeCandidates.join('; '):'nenhuma'}\nComparecimento adicional das abstenções: ${turnout}%`;
+}
+el('reset').onclick=()=>{
+  candidates.forEach((_,i)=>{
+    el('enabled'+i).checked=false;
+    el('s'+i).value=50;
+  });
+  el('turnout').value=0;
+  el('abst').value=50;
+  calculate();
+};
+el('copy').onclick=async()=>{try{await navigator.clipboard.writeText(window.resultText);el('copy').textContent='Copiado!';setTimeout(()=>el('copy').textContent='Copiar resultado',1500)}catch(e){alert('Não foi possível copiar neste navegador.')}};
+calculate();
 </script></body></html>
